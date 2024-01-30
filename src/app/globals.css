@@ -26,6 +26,14 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+input {
+  color: #000;
+}
+
+input[type='submit'] {
+  background-color: #fff;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
