@@ -1,67 +1,125 @@
 'use client';
 
-const Form = () => {
-  function submitHandler(e: React.FormEvent<HTMLFormElement>) {
+import { supabase } from '@/db/client';
+import { IPriceItem } from '@/types/database';
+import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
+import { useRouter } from 'next/navigation';
+
+// TODO: handle with server actions
+const Form = ({ initialValues }: { initialValues?: IPriceItem }) => {
+  const router = useRouter();
+  async function submitHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log(e.currentTarget.value);
     const target = e.target as typeof e.target & {
       name: { value: string };
       url: { value: string };
-      selector: { value: string };
-      basePrice: { value: number };
+      css_selector: { value: string };
+      base_price: { value: number }; // TODO: check and validate as number
     };
 
-    const itemsList = localStorage.getItem('list');
+    console.log(typeof target.base_price.value);
 
-    if (itemsList) {
-      const parsed = JSON.parse(itemsList);
-      localStorage.setItem(
-        'list',
-        JSON.stringify({
-          ...parsed,
-          [target.name.value]: {
+    // TODO: add validation
+    try {
+      if (initialValues) {
+        // update
+        const res = await supabase
+          .from('price_items')
+          .update({
+            name: target.name.value,
             url: target.url.value,
-            selector: target.selector.value,
-            basePrice: target.basePrice.value,
-          },
-        })
-      );
-    } else {
-      localStorage.setItem(
-        'list',
-        JSON.stringify({
-          [target.name.value]: {
+            css_selector: target.css_selector.value,
+            base_price: target.base_price.value,
+          })
+          .eq('id', initialValues.id);
+        console.log('updated', res);
+        // TODO: see how to update ui
+        router.replace(`/brands/${initialValues.id}`);
+      } else {
+        // create
+        const res = await supabase
+          .from('price_items')
+          .insert({
+            name: target.name.value,
             url: target.url.value,
-            selector: target.selector.value,
-            basePrice: target.basePrice.value,
-          },
-        })
-      );
+            css_selector: target.css_selector.value,
+            base_price: target.base_price.value,
+          })
+          .select()
+          .single();
+        router.replace(`/brands/${res.data.id}`);
+      }
+    } catch (error) {
+      console.error(error);
     }
+
+    // TODO: add an action after creation succes
   }
 
-  // TODO: add update, use db
+  // TODO: add update
   return (
     <form onSubmit={submitHandler} className='flex flex-col gap-2'>
-      <label htmlFor='name'>
-        Name <input type='text' name='name' />
-      </label>
+      <div>
+        <div className='flex gap-2'>
+          <Field
+            name='name'
+            label='Name'
+            required
+            defaultValue={initialValues ? initialValues.name : undefined}
+          />
+          <Field
+            name='url'
+            label='Url'
+            required
+            defaultValue={initialValues ? initialValues.url : undefined}
+          />
+        </div>
 
-      <label htmlFor='url'>
-        Url <input type='text' name='url' />
-      </label>
+        <div className='flex gap-2'>
+          <Field
+            name='css_selector'
+            label='Selector'
+            required
+            defaultValue={
+              initialValues ? initialValues.css_selector : undefined
+            }
+          />
+          <Field
+            name='base_price'
+            label='BasePrice'
+            type='number'
+            step='0.01'
+            required
+            defaultValue={initialValues ? initialValues.base_price : undefined}
+          />
+        </div>
+      </div>
 
-      <label htmlFor='selector'>
-        Selector <input type='text' name='selector' />
-      </label>
-
-      <label htmlFor='basePrice'>
-        BasePrice <input type='number' step='0.01' name='basePrice' />
-      </label>
-
-      <input type='submit' value='submit' />
+      <input type='submit' value={initialValues ? 'update' : 'create'} />
     </form>
   );
 };
 
 export default Form;
+
+const Field = ({
+  name,
+  label,
+  type,
+  ...props
+}: DetailedHTMLProps<
+  InputHTMLAttributes<HTMLInputElement>,
+  HTMLInputElement
+> & { label: string }) => {
+  return (
+    <label htmlFor={name} className='w-full'>
+      {label}
+      <input
+        type={type ?? 'text'}
+        name={name}
+        className='block w-full rounded-sm p-2'
+        {...props}
+      />
+    </label>
+  );
+};
