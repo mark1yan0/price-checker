@@ -1,8 +1,9 @@
 import Delete from '@/components/DeleteButton';
 import Form from '@/components/Form';
-import { supabase } from '@/db/client';
+import { getItem } from '@/db';
 import { IPriceItem } from '@/types/database';
 import Link from 'next/link';
+import { updateItemAction } from '@/app/actions';
 
 interface IResponseData {
   data: {
@@ -12,7 +13,7 @@ interface IResponseData {
   status: 'ok';
 }
 
-async function getData(body: Omit<IPriceItem, 'id'>) {
+async function fetchCurrentPrice(body: Omit<IPriceItem, 'id'>) {
   const res = await fetch('http://localhost:3000/api/brands', {
     method: 'POST',
     headers: {
@@ -26,19 +27,14 @@ async function getData(body: Omit<IPriceItem, 'id'>) {
   return data.data;
 }
 
-// TODO: refactor
 export default async function Brand({ params }: { params: { id: number } }) {
-  const { data: item } = await supabase
-    .from('price_items')
-    .select()
-    .eq('id', params.id)
-    .single<IPriceItem>(); // todo: handle error
+  const item = await getItem(params.id);
 
   if (!item) {
     return 'no item found';
   }
 
-  const data = await getData(item);
+  const data = await fetchCurrentPrice(item);
   return (
     <>
       <Link href='/'>Go back</Link>
@@ -53,20 +49,26 @@ export default async function Brand({ params }: { params: { id: number } }) {
         <PriceDisplay label='Current' price={data.currentPrice} />
       </div>
 
-      <Form
-        initialValues={{
-          id: item.id,
-          name: item.name,
-          url: item.url,
-          css_selector: item.css_selector,
-          base_price: item.base_price,
-        }}
-      />
+      <UpdateItemForm item={item} />
     </>
   );
 }
 
-// TODO: update values after mutation
+const UpdateItemForm = ({ item }: { item: IPriceItem }) => {
+  const updateItemActionWithId = updateItemAction.bind(null, item.id);
+  return (
+    <Form
+      initialValues={{
+        id: item.id,
+        name: item.name,
+        url: item.url,
+        css_selector: item.css_selector,
+        base_price: item.base_price,
+      }}
+      action={updateItemActionWithId}
+    />
+  );
+};
 
 const PriceDisplay = ({ label, price }: { label: string; price: number }) => {
   return (

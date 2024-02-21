@@ -1,4 +1,4 @@
-import { IDatabase } from '@/types/database';
+import { IDatabase, IPriceItem } from '@/types/database';
 import { createClient } from '@supabase/supabase-js';
 
 if (
@@ -16,3 +16,21 @@ export const supabase = createClient<IDatabase>(
 );
 
 // TODO: enable row level security and policies
+
+export const getItems = async () => {
+  const { data } = await supabase // TODO: handle error
+    .from('price_items')
+    .select()
+    .returns<IPriceItem[]>();
+
+  return data;
+};
+export const getItem = async (id: number) => {
+  const { data } = await supabase
+    .from('price_items')
+    .select()
+    .eq('id', id)
+    .single<IPriceItem>();
+
+  return data;
+};

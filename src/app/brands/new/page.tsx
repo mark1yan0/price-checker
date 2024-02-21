@@ -1,12 +1,10 @@
+import { createItemAction } from '@/app/actions';
 import Form from '@/components/Form';
-
-// https://elohimsaga.store/collections/one-piece/products/luffy-gear-5-graphic-sweatshirt
-// span[data-product-price]
 
 const New = async () => {
   return (
     <div>
-      <Form />
+      <Form action={createItemAction} />
     </div>
   );
 };

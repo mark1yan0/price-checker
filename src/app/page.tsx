@@ -1,12 +1,9 @@
-import { supabase } from '@/db/client';
+import { getItems } from '@/db';
 import { IPriceItem } from '@/types/database';
 import Link from 'next/link';
 
 export default async function Home() {
-  const { data } = await supabase // TODO: handle error
-    .from('price_items')
-    .select()
-    .returns<IPriceItem[]>();
+  const data = await getItems();
   return (
     <>
       <Link href='/brands/new'>New</Link>
