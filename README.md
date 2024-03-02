@@ -38,9 +38,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 # TODO
 
 - [ ] add loading icon to submit
-- [ ] add enter animations
-- [ ] add page transition animation
-- [ ] add button animations
+- [x] add page transition animation
+- [x] add button animations
 - [ ] add purchased button
 - [ ] on mobile top actions into a list
 - [ ] show item image if possible
+- [ ] disable create / update button it no changes
+- [ ] add validation to form
+- [ ] add outside click for sidebar
