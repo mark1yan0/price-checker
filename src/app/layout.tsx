@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <header className="-bg--color-primary-300 sticky left-0 top-0 flex h-10 w-full items-center justify-between px-4">
+        <header className="-bg--color-surface-300 sticky left-0 top-0 flex h-10 w-full items-center justify-between px-4">
           <Link href="/">PriceChecker</Link>
         </header>
         <main className="mx-auto mt-10 min-h-screen px-4 lg:max-w-[1024px] lg:px-0">
