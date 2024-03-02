@@ -1,7 +1,7 @@
-import AddNewButton from "@/components/Buttons/AddNewButton";
-import ListItem from "@/components/ListItem";
-import { getItems } from "@/db";
-import Link from "next/link";
+import AddNewButton from '@/components/Buttons/AddNewButton';
+import ListItem from '@/components/ListItem';
+import { getItems } from '@/db';
+import Link from 'next/link';
 
 export default async function Home() {
   const data = await getItems();

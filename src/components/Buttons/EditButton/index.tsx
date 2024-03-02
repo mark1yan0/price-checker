@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Button from "..";
-import { updateItemAction } from "@/app/actions";
-import { IPriceItem } from "@/types/database";
-import Form from "@/components/Form";
-import Sidebar from "@/components/Sidebar";
+import { useState } from 'react';
+import Button from '..';
+import { updateItemAction } from '@/app/actions';
+import { IPriceItem } from '@/types/database';
+import Form from '@/components/Form';
+import Sidebar from '@/components/Sidebar';
 
 const EditButton = ({ item }: { item: IPriceItem }) => {
   const [opened, setOpened] = useState(false);
