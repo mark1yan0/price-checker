@@ -12,7 +12,7 @@ if (
 export const supabase = createClient<IDatabase>(
   // TODO: setup locally
   process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
 );
 
 // TODO: enable row level security and policies

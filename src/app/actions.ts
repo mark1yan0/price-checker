@@ -16,7 +16,6 @@ export async function createItemAction(formData: FormData) {
       .select()
       .single();
     createdId = res.data.id;
-    console.log('created');
   } catch (error) {
     console.error(error);
   }
