@@ -14,6 +14,7 @@ const Button = ({
   HTMLButtonElement
 > & { variant?: keyof typeof variants; children: React.ReactNode }) => {
   return (
+    // @ts-ignore
     <motion.button
       {...props}
       variants={bounceOnTapVariant}
