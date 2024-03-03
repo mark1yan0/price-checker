@@ -46,3 +46,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 - [ ] disable create / update button it no changes
 - [ ] add validation to form
 - [ ] add outside click for sidebar
+- [ ] optimize animations
