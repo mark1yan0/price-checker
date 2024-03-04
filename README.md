@@ -47,3 +47,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 - [ ] add validation to form
 - [ ] add outside click for sidebar
 - [ ] optimize animations
+- [ ] update site title
+- [ ] update env key to anon and make it work
+- [ ] adds segregated items based on guest user
